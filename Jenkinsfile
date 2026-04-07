@@ -1,55 +1,36 @@
 pipeline {
-
     agent any
 
-    tools {
-        maven 'Maven3'
-    }
-
     stages {
-
-        stage('Checkout Code') {
+        stage('Checkout') {
             steps {
-                git branch: 'main',
-                url: 'https://github.com/aryanycce/Selenium_CICD.git'
+                git 'https://github.com/aryanycce/Selenium_CICD.git'
             }
         }
 
-        stage('Build Project') {
+        stage('Build') {
             steps {
                 bat 'mvn clean compile'
             }
         }
 
-        stage('Run Tests') {
+        stage('Test') {
             steps {
                 bat 'mvn test'
             }
         }
 
-        stage('Verify Report Generated') {
-            steps {
-                bat 'dir target'
-            }
-        }
-
-        stage('Publish Extent Report') {
-            steps {
-                publishHTML(target: [
-                        allowMissing: true,
-                        alwaysLinkToLastBuild: true,
-                        keepAll: true,
-                        reportDir: 'target',
-                        reportFiles: 'ExtentReport.html',
-                        reportName: 'Extent Automation Report'
-                ])
-            }
-        }
+        stage('Report') {
+    steps {
+        publishHTML(target: [
+            allowMissing: false,
+            alwaysLinkToLastBuild: true,
+            keepAll: true,
+            reportDir: 'target',
+            reportFiles: 'ExtentReport.html',
+            reportName: 'Test Report'
+        ])
     }
-
-    post {
-        always {
-            archiveArtifacts artifacts: 'target/*.html', fingerprint: true
-        }
+}
     }
 }
