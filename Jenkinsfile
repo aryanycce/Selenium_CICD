@@ -2,8 +2,6 @@ pipeline {
     agent any
 
     stages {
-        
-
         stage('Build') {
             steps {
                 bat 'mvn clean compile'
@@ -19,12 +17,12 @@ pipeline {
         stage('Report') {
             steps {
                 publishHTML(target: [
-                    allowMissing: false,
+                    allowMissing: true,
                     alwaysLinkToLastBuild: true,
                     keepAll: true,
                     reportDir: 'target',
-                    reportFiles: 'extent-report.html',
-                    reportName: 'Test Report'
+                    reportFiles: 'ExtentReport.html',
+                    reportName: 'Extent Test Report'
                 ])
             }
         }
