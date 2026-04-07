@@ -2,11 +2,7 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/your-repo/project.git'
-            }
-        }
+        
 
         stage('Build') {
             steps {
