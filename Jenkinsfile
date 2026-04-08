@@ -3,9 +3,12 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/aryanycce/Selenium_CICD.git'}}
+        stage('Checkout Code') {
+    steps {
+        git branch: 'main',
+        url: 'https://github.com/aryanycce/Selenium_CICD.git'
+    }
+}
 
         stage('Build') {
             steps {
