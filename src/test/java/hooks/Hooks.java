@@ -1,43 +1,35 @@
 package hooks;
 
-import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.ExtentTest;
-
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
+
 import utils.DriverFactory;
 import utils.ExtentManager;
 
-public class Hooks 
-{
-    private static ExtentReports extent = ExtentManager.getInstance();
-    public static ThreadLocal<ExtentTest> test = new ThreadLocal<>();
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+
+public class Hooks {
+
+    static ExtentReports extent = ExtentManager.getInstance();
+    static ExtentTest test;
 
     @Before
-    public void setup(Scenario scenario) 
-    {
-        // Start the report logger for this specific scenario
-        ExtentTest extentTest = extent.createTest(scenario.getName());
-        test.set(extentTest);
-        
-        // Start the Grid Browser
+    public void setup(Scenario scenario) {
+
+        test = extent.createTest(scenario.getName());
+
         DriverFactory.initDriver();
+
     }
 
     @After
-    public void tearDown(Scenario scenario) 
-    {
-        if (scenario.isFailed()) 
-        {
-            test.get().fail("Scenario Failed!");
-        } 
-        else 
-        {
-            test.get().pass("Scenario Passed!");
-        }
+    public void tearDown() {
 
         DriverFactory.quitDriver();
-        extent.flush(); // Save the HTML report
+
+        extent.flush();   // THIS LINE CREATES REPORT FILE
+
     }
 }
