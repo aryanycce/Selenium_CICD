@@ -1,3 +1,4 @@
+api\tests\APITest.class
 stepDefinitions\LoginSteps.class
 utils\DriverFactory.class
 utils\ExtentManager.class
