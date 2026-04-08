@@ -10,8 +10,6 @@ pipeline {
         
         stage('Test') {
             steps {
-                // Runs the tests. If this fails, the pipeline skips the remaining stages 
-                // but WILL still run the 'post' block below.
                 bat 'mvn test'
             }
         }
@@ -26,17 +24,15 @@ pipeline {
     // The post block runs after all stages have been evaluated
     post {
         always {
-            stage('Publish Report') {
-                // Publishes the report whether the build/tests passed or failed
-                publishHTML(target: [
-                    allowMissing: false,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: 'target',
-                    reportFiles: 'ExtentReport.html',
-                    reportName: 'Extent Automation Report'
-                ])
-            }
+            // Run the publishHTML step directly, without wrapping it in a 'stage'
+            publishHTML(target: [
+                allowMissing: false,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'target',
+                reportFiles: 'ExtentReport.html',
+                reportName: 'Extent Automation Report'
+            ])
         }
     }
 }
