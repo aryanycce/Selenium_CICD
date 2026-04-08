@@ -3,6 +3,9 @@ pipeline {
     agent any
 
     stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/aryanycce/Selenium_CICD.git'}}
 
         stage('Build') {
             steps {
