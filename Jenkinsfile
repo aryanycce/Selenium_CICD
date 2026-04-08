@@ -2,37 +2,55 @@ pipeline {
 
     agent any
 
-    stages {
-        stage('Checkout Code') {
-    steps {
-        git branch: 'main',
-        url: 'https://github.com/aryanycce/Selenium_CICD.git'
+    tools {
+        maven 'Maven3'
     }
-}
 
-        stage('Build') {
+    stages {
+
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main',
+                url: 'https://github.com/aryanycce/Selenium_CICD.git'
+            }
+        }
+
+        stage('Build Project') {
             steps {
                 bat 'mvn clean compile'
             }
         }
 
-        stage('Test') {
+        stage('Run UI + API Tests') {
             steps {
                 bat 'mvn test'
             }
         }
 
-        stage('Publish Report') {
+        stage('Verify Reports Generated') {
+            steps {
+                bat 'dir target'
+            }
+        }
+
+        stage('Publish Extent Report') {
             steps {
                 publishHTML(target: [
-                        allowMissing: false,
+                        allowMissing: true,
                         alwaysLinkToLastBuild: true,
                         keepAll: true,
                         reportDir: 'target',
                         reportFiles: 'ExtentReport.html',
-                        reportName: 'Extent Report'
+                        reportName: 'Extent Automation Report'
                 ])
             }
         }
+
+        stage('Publish TestNG Results') {
+            steps {
+                junit 'target/surefire-reports/*.xml'
+            }
+        }
+
     }
 }
